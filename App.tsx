@@ -81,7 +81,80 @@ export default function App(){
 }
 
 function PageTitle({eyebrow,title,text}:{eyebrow:string;title:string;text:string}){return <div className="page-title"><div className="eyebrow">{eyebrow}</div><h1>{title}</h1><p>{text}</p></div>}
-function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare}:{p:Product;onOpen:()=>void;onAdd:()=>void;wished:boolean;onWish:()=>void;compare?:boolean;onCompare?:()=>void}){return <article className="product-card"><div className="product-image" style={{backgroundImage:`url(${p.image})`}} onClick={onOpen}><span className="product-category">{p.category}</span><span className="concept-tag">CONCEPT IMAGE</span><button className="wish-btn" onClick={e=>{e.stopPropagation();onWish();}} aria-label="Toggle wishlist"><Heart size={17} fill={wished?'currentColor':'none'}/></button>{p.stock===0&&<span className="sold-overlay">Currently unavailable</span>}</div><div className="product-card-body"><div className="product-meta"><span>{p.color} · {p.style}</span><span>{p.stock>0?`${p.stock} available`:'Out of stock'}</span></div><button className="product-name" onClick={onOpen}>{p.name}<ArrowUpRight size={16}/></button><div className="product-bottom"><b>{money(p.price)} <small>/ tile</small></b><button className="add-btn" disabled={!p.stock} onClick={onAdd}><Plus size={15}/> Add</button></div>{onCompare&&<label className="compare-check"><input type="checkbox" checked={!!compare} onChange={onCompare}/> Add to compare</label>}</div></article>}
+function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare,reviews=[]}:{
+  p:Product;
+  onOpen:()=>void;
+  onAdd:()=>void;
+  wished:boolean;
+  onWish:()=>void;
+  compare?:boolean;
+  onCompare?:()=>void;
+  reviews?:Review[];
+}) {
+  const productReviews = reviews.filter(
+    r => r.productId === p.id && r.approved
+  );
+  const reviewCount = productReviews.length;
+  const averageRating = reviewCount
+    ? productReviews.reduce((sum,r)=>sum+r.rating,0)/reviewCount
+    : 0;
+
+  return (
+    <article className="product-card">
+      <div className="product-image"
+        style={{backgroundImage:`url(${p.image})`}}
+        onClick={onOpen}>
+        <span className="product-category">{p.category}</span>
+        <span className="concept-tag">CONCEPT IMAGE</span>
+        <button className="wish-btn"
+          onClick={e=>{e.stopPropagation();onWish();}}
+          aria-label="Toggle wishlist">
+          <Heart size={17} fill={wished?'currentColor':'none'}/>
+        </button>
+        {p.stock===0&&<span className="sold-overlay">Currently unavailable</span>}
+      </div>
+
+      <div className="product-card-body">
+        <div className="product-meta">
+          <span>{p.color} · {p.style}</span>
+          <span>{p.stock>0?`${p.stock} available`:'Out of stock'}</span>
+        </div>
+
+        <button className="product-name" onClick={onOpen}>
+          {p.name}<ArrowUpRight size={16}/>
+        </button>
+
+        <div className="product-rating">
+          {reviewCount>0 ? (
+            <>
+              <span className="stars">
+                {'★'.repeat(Math.round(averageRating))}
+                {'☆'.repeat(5-Math.round(averageRating))}
+              </span>
+              <span>{averageRating.toFixed(1)} ({reviewCount})</span>
+            </>
+          ) : (
+            <span className="no-rating">No reviews yet</span>
+          )}
+        </div>
+
+        <div className="product-bottom">
+          <b>{money(p.price)} <small>/ tile</small></b>
+          <button className="add-btn" disabled={!p.stock} onClick={onAdd}>
+            <Plus size={15}/> Add
+          </button>
+        </div>
+
+        {onCompare&&
+          <label className="compare-check">
+            <input type="checkbox" checked={!!compare} onChange={onCompare}/>
+            Add to compare
+          </label>
+        }
+      </div>
+    </article>
+  );
+}p:Product;onOpen:()=>void;onAdd:()=>void;wished:boolean;onWish:()=>void;compare?:boolean;onCompare?:()=>void}){return <article className="product-card"><div className="product-image" style={{backgroundImage:`url(${p.image})`}} onClick={onOpen}><span className="product-category">{p.category}</span><span className="concept-tag">CONCEPT IMAGE</span><button className="wish-btn" onClick={e=>{e.stopPropagation();onWish();}} aria-label="Toggle wishlist"><Heart size={17} fill={wished?'currentColor':'none'}/></button>{p.stock===0&&<span className="sold-overlay">Currently unavailable</span>}</div><div className="product-card-body"><div className="product-meta"><span>{p.color} · {p.style}</span><span>{p.stock>0?`${p.stock} available`:'Out of stock'}</span></div><button className="product-name" onClick={onOpen}>{p.name}<ArrowUpRight size={16}/></button><div className="product-bottom"><b>{money(p.price)} <small>/ tile</small></b><button className="add-btn" disabled={!p.stock} onClick={onAdd}><Plus size={15}/> Add</button></div>{onCompare&&<label className="compare-check"><input type="checkbox" checked={!!compare} onChange={onCompare}/> Add to compare</label>}</div></article>}
 function Qty({initial,max,onChange}:{initial:number;max:number;onChange:(n:number)=>void}){const [n,setN]=useState(initial);useEffect(()=>setN(initial),[initial]);return <div className="qty-control"><button onClick={()=>{const x=Math.max(1,n-1);setN(x);onChange(x);}} aria-label="Decrease"><Minus size={13}/></button><span>{n}</span><button onClick={()=>{const x=Math.min(max,n+1);setN(x);onChange(x);}} disabled={n>=max} aria-label="Increase"><Plus size={13}/></button></div>}
 function Empty({title,text,action,actionText}:{title:string;text:string;action?:()=>void;actionText?:string}){return <div className="empty-state"><div className="empty-icon"><Package/></div><h3>{title}</h3><p>{text}</p>{action&&<button className="btn btn-primary" onClick={action}>{actionText}</button>}</div>}
 function OrderSummary({subtotal,shipping,button,onClick}:{subtotal:number;shipping:number;button:string;onClick:()=>void}){return <aside className="summary-card"><h3>Order summary</h3><div><span>Subtotal</span><b>{money(subtotal)}</b></div><div><span>Estimated shipping</span><b>{money(shipping)}</b></div><div className="summary-total"><span>Total</span><b>{money(subtotal+shipping)}</b></div><button className="btn btn-primary full" onClick={onClick}>{button} <ArrowRight size={16}/></button><small>Shipping fee is a configurable demo setting.</small></aside>}
