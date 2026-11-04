@@ -129,7 +129,7 @@ export default function App(){
 }
 
 function PageTitle({eyebrow,title,text}:{eyebrow:string;title:string;text:string}){return <div className="page-title"><div className="eyebrow">{eyebrow}</div><h1>{title}</h1><p>{text}</p></div>}
-function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare,reviews=[]}:{
+function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare,reviews=[],orders=[]}:{
   p:Product;
   onOpen:()=>void;
   onAdd:()=>void;
@@ -138,6 +138,7 @@ function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare,reviews=[]}
   compare?:boolean;
   onCompare?:()=>void;
   reviews?:Review[];
+orders?:Order[];
 }) {
   const productReviews = reviews.filter(
     r => r.productId === p.id && r.approved
