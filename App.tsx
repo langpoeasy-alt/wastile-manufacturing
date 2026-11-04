@@ -144,6 +144,12 @@ orders?:Order[];
     r => r.productId === p.id && r.approved
   );
   const reviewCount = productReviews.length;
+ const soldCount = orders
+  .filter(order => order.status === 'Delivered')
+  .reduce((total, order) => {
+    const item = order.items.find(i => i.productId === p.id);
+    return total + (item ? item.qty : 0);
+  }, 0);
   const averageRating = reviewCount
     ? productReviews.reduce((sum,r)=>sum+r.rating,0)/reviewCount
     : 0;
