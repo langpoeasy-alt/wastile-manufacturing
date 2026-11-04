@@ -23,7 +23,28 @@ const demoOrders:Order[]=[{id:'WST-26001',date:'2026-10-28',customer:'Mika Santo
 const demoReviews:Review[]=[{id:'r1',productId:'lum-01',author:'Sample customer · Mika S.',rating:5,text:'The botanical pattern brings a beautiful focal point to our sample wall.',approved:true,demo:true},{id:'r2',productId:'lum-03',author:'Sample customer · Paolo R.',rating:4,text:'Warm colors and an interesting handcrafted look.',approved:true,demo:true},{id:'r3',productId:'lum-05',author:'Sample customer · Andrea C.',rating:5,text:'A clean design that works well with a modern interior.',approved:false,demo:true}];
 const seed:Store={products:initialProducts,orders:demoOrders,customers:demoCustomers,reviews:demoReviews,inventoryHistory:[{id:'inv-1',date:'2026-10-20',productId:'lum-01',productName:'Forest Canopy',movement:'Stock-in',quantity:40,note:'Demo opening balance'},{id:'inv-2',date:'2026-10-24',productId:'lum-03',productName:'Terra Mosaic',movement:'Stock-in',quantity:20,note:'Demo opening balance'}],settings:{shipping:120,lowStock:10,announcement:'A brighter way to design — explore our Luminous Tiles collection.',company:'Wastile Manufacturing',email:'hello@wastile.ph',phone:'+63 917 000 0000',pointsPerPeso:1}};
 const KEY='wastile-store-v1';
-function loadStore():Store {try {const v=localStorage.getItem(KEY);return v?JSON.parse(v):seed;}catch{return seed;}}
+function loadStore():Store {
+  try {
+    const v = localStorage.getItem(KEY);
+
+    if (!v) return seed;
+
+    const saved = JSON.parse(v) as Store;
+
+    return {
+      ...saved,
+      products: saved.products.map(p => {
+        const latest = initialProducts.find(x => x.id === p.id);
+
+        return latest
+          ? { ...p, image: latest.image }
+          : p;
+      })
+    };
+  } catch {
+    return seed;
+  }
+}
 const money=(n:number)=>`₱${n.toLocaleString('en-PH',{maximumFractionDigits:2})}`;
 const statuses=['Order Placed','Confirmed','Processing','Ready for Shipment','Shipped','Delivered','Cancelled'];
 
