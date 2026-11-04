@@ -86,11 +86,15 @@ function ProductCard({p,onOpen,onAdd,wished,onWish,compare,onCompare,reviews=[],
     : 0;
 
   const soldCount = orders
-    .filter(order => order.status === 'Delivered')
-    .reduce((total, order) => {
-      const item = order.items.find(i => i.productId === p.id);
-      return total + (item ? item.qty : 0);
-    }, 0);
+  .filter(order => order.status?.trim().toLowerCase() === 'delivered')
+  .reduce((total, order) => {
+    const item = order.items.find(
+      i => i.productId === p.id ||
+           i.name?.trim().toLowerCase() === p.name.trim().toLowerCase()
+    );
+
+    return total + (item ? item.qty : 0);
+  }, 0);
 
   return (
     <article className="product-card">
