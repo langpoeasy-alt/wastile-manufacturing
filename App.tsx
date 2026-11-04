@@ -89,6 +89,16 @@ export default function App(){
     );
   })()}
 </div>
+  <div className="product-sold">
+  {store.orders
+    .filter(order => order.status === 'Delivered')
+    .reduce((total, order) => {
+      const item = order.items.find(
+        i => i.productId === selectedProduct.id
+      );
+      return total + (item ? item.qty : 0);
+    }, 0)} sold
+</div>
 <div className="detail-price">{money(selectedProduct.price)} <small>/ tile · demo price</small></div><p>{selectedProduct.description}</p><div className="spec-chips"><span>15 × 15 cm</span><span>Approx. 200 g</span><span>{selectedProduct.stock} in stock</span></div><div className="spec-note"><Sparkles size={17}/><span>Glow powder is applied only to recessed internal design lines or decorative patterns — not across the full tile or outer edges.</span></div><div className="detail-specs"><div><span>Dimensions</span><b>15 × 15 cm</b></div><div><span>Approx. weight</span><b>200 g</b></div><div><span>Design style</span><b>{selectedProduct.style}</b></div><div><span>Availability</span><b>{selectedProduct.stock>0?'In stock':'Out of stock'}</b></div></div><div className="buy-row"><Qty initial={detailQty} max={selectedProduct.stock} onChange={setDetailQty}/><button className="btn btn-primary" disabled={!selectedProduct.stock} onClick={()=>addCart(selectedProduct.id,detailQty)}>Add to cart <ShoppingBag size={17}/></button><button className="icon-btn bordered" onClick={()=>toggleWish(selectedProduct.id)}><Heart fill={wishlist.includes(selectedProduct.id)?'currentColor':'none'}/></button></div><p className="fine-print">Product details are preliminary demo specifications. Please confirm final technical data before commercial sale.</p></div></div>
   <div className="section product-reviews">
   <h2>Customer Reviews</h2>
