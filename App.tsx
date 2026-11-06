@@ -34,7 +34,21 @@ function loadStore():Store {
       ...saved,
       products: saved.products.map(product => {
         const updated = initialProducts.find(p => p.id === product.id);
-        return updated ? { ...product, image: updated.image } : product;
+
+        return updated
+          ? {
+              ...product,
+              name: updated.name,
+              category: updated.category,
+              color: updated.color,
+              style: updated.style,
+              room: updated.room,
+              description: updated.description,
+              image: updated.image,
+              accent: updated.accent,
+              pattern: updated.pattern
+            }
+          : product;
       })
     };
   } catch {
