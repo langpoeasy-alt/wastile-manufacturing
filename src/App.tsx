@@ -11,12 +11,12 @@ type InventoryLog = {id:string;date:string;productId:string;productName:string;m
 type Store = {products:Product[]; orders:Order[]; customers:Customer[]; reviews:Review[]; inventoryHistory:InventoryLog[]; settings:{shipping:number; lowStock:number; announcement:string; company:string; email:string; phone:string; pointsPerPeso:number}};
 
 const initialProducts:Product[] = [
- {id:'lum-01',name:'Forest Canopy',price:59,category:'Nature',color:'Green',style:'Organic',room:'Living room',description:'Layered botanical fragments with fine luminous detailing inspired by forest light.',stock:86,available:true,image:'/images/forest-canopy.jpg',accent:'#66866a',pattern:'leaf'},
- {id:'lum-02',name:'Midnight Current',price:59,category:'Geometric',color:'Blue',style:'Contemporary',room:'Bathroom',description:'Deep ocean tones and precise flowing geometry with glow accents in recessed lines.',stock:54,available:true,image:'/images/midnight-current.jpg',accent:'#537d91',pattern:'wave'},
- {id:'lum-03',name:'Terra Mosaic',price:59,category:'Earth',color:'Terracotta',style:'Rustic',room:'Kitchen',description:'Warm mineral-inspired tones arranged in a handcrafted mosaic composition.',stock:12,available:true,image:'/images/terra-mosaic.jpg',accent:'#b77c5c',pattern:'mosaic'},
- {id:'lum-04',name:'Ivory Orbit',price:59,category:'Minimal',color:'Ivory',style:'Minimalist',room:'Bedroom',description:'Soft ivory surfaces and restrained circular motifs for calm, considered spaces.',stock:7,available:true,image:'/images/ivory-orbit.jpg',accent:'#c6bda7',pattern:'orbit'},
- {id:'lum-05',name:'Sage Circuit',price:59,category:'Geometric',color:'Sage',style:'Contemporary',room:'Office',description:'A modern repeating pattern in muted sage with delicate luminous inlay lines.',stock:43,available:true,image:'/images/sage-circuit.jpg',accent:'#8c9e83',pattern:'grid'},
- {id:'lum-06',name:'Golden Hour',price:59,category:'Earth',color:'Gold',style:'Art Deco',room:'Entryway',description:'A warm statement design with subtle metallic-inspired color and patterned glow detail.',stock:0,available:false,image:'/images/golden-hour.jpg',accent:'#b69a60',pattern:'sun'}
+ {id:'lum-01',name:'Obsidian Luxe',price:59,category:'Marble Collection',color:'Black',style:'Luxury',room:'Living room',description:'Elegant black marble-inspired design with distinctive veining for a bold and sophisticated interior.',stock:86,available:true,image:'/images/Obsidian-Luxe.png',accent:'#292929',pattern:'marble'},
+ {id:'lum-02',name:'Crimson Royale',price:59,category:'Marble Collection',color:'Red',style:'Luxury',room:'Living room',description:'A rich red marble-inspired design that brings warmth, character, and elegance to any space.',stock:54,available:true,image:'/images/Crimson-Royale.png',accent:'#9f3438',pattern:'marble'},
+ {id:'lum-03',name:'Sapphire Mist',price:59,category:'Marble Collection',color:'Blue',style:'Contemporary',room:'Bathroom',description:'A sophisticated blue marble-inspired design that creates a refreshing and modern atmosphere.',stock:12,available:true,image:'/images/Sapphire-Mist.png',accent:'#426b91',pattern:'marble'},
+ {id:'lum-04',name:'Silverstone',price:59,category:'Marble Collection',color:'Gray',style:'Minimalist',room:'Bedroom',description:'A timeless gray marble-inspired design perfect for clean, balanced, and modern interiors.',stock:7,available:true,image:'/images/Silver-Stone.png',accent:'#858585',pattern:'marble'},
+ {id:'lum-05',name:'Emerald Serenity',price:59,category:'Marble Collection',color:'Green',style:'Contemporary',room:'Office',description:'A refined green marble-inspired design that adds a natural and calming touch to your space.',stock:43,available:true,image:'/images/Emerald-Serenity.png',accent:'#39745a',pattern:'marble'},
+ {id:'lum-06',name:'Rose Quartz',price:59,category:'Marble Collection',color:'Pink',style:'Modern',room:'Bedroom',description:'A soft pink marble-inspired design that adds elegance and a gentle touch of color to your interior.',stock:0,available:false,image:'/images/Rose-Quartz.png',accent:'#d58fa7',pattern:'marble'}
 ];
 const demoCustomers:Customer[]=[{id:'c-001',name:'Mika Santos',email:'mika@example.com',phone:'09171234567',points:420},{id:'c-002',name:'Paolo Reyes',email:'paolo@example.com',phone:'09281234567',points:185},{id:'c-003',name:'Andrea Cruz',email:'andrea@example.com',phone:'09951234567',points:760}];
 const demoOrders:Order[]=[{id:'WST-26001',date:'2026-10-28',customer:'Mika Santos',email:'mika@example.com',phone:'09171234567',address:'Dasmariñas, Cavite',items:[{productId:'lum-01',name:'Forest Canopy',price:59,qty:12},{productId:'lum-05',name:'Sage Circuit',price:59,qty:8}],total:1180,shipping:120,status:'Processing',payment:'Cash on Delivery'},{id:'WST-26002',date:'2026-10-30',customer:'Paolo Reyes',email:'paolo@example.com',phone:'09281234567',address:'Imus, Cavite',items:[{productId:'lum-03',name:'Terra Mosaic',price:59,qty:20}],total:1300,shipping:120,status:'Shipped',payment:'Simulated online payment'},{id:'WST-26003',date:'2026-11-02',customer:'Andrea Cruz',email:'andrea@example.com',phone:'09951234567',address:'Bacoor, Cavite',items:[{productId:'lum-02',name:'Midnight Current',price:59,qty:10}],total:710,shipping:120,status:'Delivered',payment:'Cash on Delivery'}];
@@ -26,21 +26,35 @@ const KEY='wastile-store-v1';
 function loadStore():Store {
   try {
     const v = localStorage.getItem(KEY);
-
     if (!v) return seed;
 
-    const saved = JSON.parse(v) as Store;
+    const saved:Store = JSON.parse(v);
 
     return {
       ...saved,
-      products: saved.products.map(p => {
-        const latest = initialProducts.find(x => x.id === p.id);
+      products: saved.products.map(product => {
+        const updated = initialProducts.find(p => p.id === product.id);
 
-        return latest
-          ? { ...p, image: latest.image }
-          : p;
+        return updated
+          ? {
+              ...product,
+              name: updated.name,
+              category: updated.category,
+              color: updated.color,
+              style: updated.style,
+              room: updated.room,
+              description: updated.description,
+              image: updated.image,
+              accent: updated.accent,
+              pattern: updated.pattern
+            }
+          : product;
       })
     };
+  } catch {
+    return seed;
+  }
+}
   } catch {
     return seed;
   }
