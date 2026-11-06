@@ -55,10 +55,6 @@ function loadStore():Store {
     return seed;
   }
 }
-  } catch {
-    return seed;
-  }
-}
 const money=(n:number)=>`₱${n.toLocaleString('en-PH',{maximumFractionDigits:2})}`;
 const statuses=['Order Placed','Confirmed','Processing','Ready for Shipment','Shipped','Delivered','Cancelled'];
 
