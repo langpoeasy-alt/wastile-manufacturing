@@ -23,19 +23,12 @@
 .concept-tag{position:absolute;bottom:12px;left:12px;background:#f8f6eddd;color:#667464;padding:6px 8px;font-size:7px;letter-spacing:1px}
 
 
-/* Desktop homepage hero adjustment */
+/* Full-width homepage hero */
 @media (min-width: 721px) {
   .hero {
-    min-height: 650px;
-    grid-template-columns: 44% 56%;
-  }
-
-  .hero-art {
-    min-height: 650px;
-  }
-}
-@media (min-width: 721px) {
-  .hero {
+    width: 100%;
+    max-width: none;
+    margin: 0;
     min-height: 650px;
     grid-template-columns: 44% 56%;
   }
