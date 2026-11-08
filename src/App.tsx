@@ -82,21 +82,22 @@ export default function App(){
   <div className="eyebrow light">WHY WASTILE</div>
   <h2>Small fragments.<br/><em>Big possibility.</em></h2>
 </div><div className="benefit-list">{[['01','A distinctive glow','Illuminating detail lives within the recessed design lines.'],['02','A material with a story','Selected discarded plastics are reimagined as decorative surfaces.'],['03','Designed for expression','A growing range of patterns for considered interiors.']].map(([n,t,d])=><div className="benefit-row" key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><ArrowUpRight size={19}/></div>)}</div></div></section><section className="inspiration-section">
-  <div className="inspiration-copy">
+  <img
+    className="inspiration-background"
+    src="/images/Living-Room.png"
+    alt="Modern minimalist living room inspiration"
+  />
+
+  <div className="inspiration-overlay">
     <div className="eyebrow">INSPIRATION</div>
+
     <h2>
       Spaces with a little more <em>spark.</em>
     </h2>
-    <p className="muted">
+
+    <p>
       Concept imagery · not actual installations
     </p>
-  </div>
-
-  <div className="inspiration-image-container">
-    <img
-      src="/images/Living-Room.png"
-      alt="Modern minimalist living room inspiration"
-    />
   </div>
 </section><section className="newsletter"><div><div className="eyebrow light">STAY IN THE LOOP</div><h2>Good things are <em>glowing.</em></h2><p>Get collection updates, design notes and sustainable material stories.</p></div><Newsletter notify={notify}/></section><Footer go={p=>p==='admin'?goAdmin():go(p)} settings={store.settings}/></>}
  {page==='catalog'&&<main className="container page-content"><PageTitle eyebrow="SHOP THE COLLECTION" title="Luminous by design." text="Explore six decorative designs, each with its own character. Demo catalog pricing is ₱59 per tile."/><div className="catalog-controls"><div className="search-box"><Search size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search designs..."/></div><select value={category} onChange={e=>setCategory(e.target.value)}><option>All</option>{['Nature','Geometric','Earth','Minimal'].map(x=><option key={x}>{x}</option>)}</select><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="stock">Stock available</option></select><button className="btn btn-outline" onClick={()=>go('compare')}><SlidersHorizontal size={16}/> Compare ({compare.length})</button></div><div className="product-grid">{filtered.map(p=><ProductCard key={p.id} p={p} onOpen={()=>{setSelected(p.id);setDetailQty(1);go('product');}} onAdd={()=>addCart(p.id)} wished={wishlist.includes(p.id)} onWish={()=>toggleWish(p.id)} compare={compare.includes(p.id)} onCompare={()=>setCompare(c=>c.includes(p.id)?c.filter(x=>x!==p.id):[...c,p.id])} reviews={store.reviews} orders={store.orders}/>)}</div>{filtered.length===0&&<Empty title="No designs found" text="Try another search or category."/>}</main>}
