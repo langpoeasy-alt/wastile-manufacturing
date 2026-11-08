@@ -39,12 +39,5 @@
 
   .hero-art {
     min-height: 650px;
-    overflow: hidden;
-  }
-
-  .hero-photo {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 }
