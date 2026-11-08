@@ -72,3 +72,28 @@
     background-repeat: no-repeat;
   }
 }
+.collection-section {
+  width: calc(100% - 100px);
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.collection-section .product-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.collection-section .product-image {
+  height: 320px;
+}
+
+@media (max-width: 720px) {
+  .collection-section {
+    width: calc(100% - 36px);
+  }
+
+  .collection-section .product-image {
+    height: 185px;
+  }
+}
