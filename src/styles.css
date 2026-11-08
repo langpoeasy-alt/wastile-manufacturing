@@ -34,3 +34,17 @@
     min-height: 650px;
   }
 }
+@media (min-width: 721px) {
+  .hero {
+    min-height: 650px;
+    grid-template-columns: 44% 56%;
+  }
+
+  .hero-copy {
+    padding: 100px 48px 65px 72px;
+  }
+
+  .hero-art {
+    min-height: 650px;
+  }
+}
