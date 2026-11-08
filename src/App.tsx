@@ -230,29 +230,4 @@ function AdminApp({store,patchStore,updateStatus,notify,reset,goStore}:{store:St
 function Metric({icon,label,value,change,alert=false}:{icon:React.ReactNode;label:string;value:string;change:string;alert?:boolean}){return <div className="metric-card"><div className="metric-top"><span>{icon}</span>{alert&&<b className="alert-label">Attention</b>}</div><small>{label}</small><strong>{value}</strong><p>{change}</p></div>}
 function OrderTable({orders,onStatus,detailed=false}:{orders:Order[];onStatus:(id:string,status:string)=>void;detailed?:boolean}){return <div className="table-scroll"><table className="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Amount</th><th>Status</th>{detailed&&<th>Payment / Delivery</th>}</tr></thead><tbody>{orders.map(o=><tr key={o.id}><td><b>{o.id}</b><small className="table-sub">{o.items.reduce((a,x)=>a+x.qty,0)} tile(s)</small></td><td>{o.customer}<small className="table-sub">{o.email}</small></td><td>{o.date}</td><td><b>{money(o.total)}</b></td><td><select className="status-select" value={o.status} onChange={e=>onStatus(o.id,e.target.value)}>{statuses.map(s=><option key={s}>{s}</option>)}</select></td>{detailed&&<td>{o.payment}<small className="table-sub">{o.address}</small></td>}</tr>)}</tbody></table>{!orders.length&&<Empty title="No orders found" text="Orders will appear here when customers check out."/>}</div>}
 function ProductEditor({product,onSave,onCancel}:{product:Product|null;onSave:(p:Product)=>void;onCancel:()=>void}){const [p,setP]=useState<Product>(product||{id:`lum-${Date.now()}`,name:'',price:59,category:'Nature',color:'Green',style:'Organic',room:'Living room',description:'',stock:0,available:true,image:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=85',accent:'#66866a',pattern:'mosaic'});const change=(k:keyof Product,v:any)=>setP(x=>({...x,[k]:v}));const upload=(file?:File)=>{if(!file)return;const reader=new FileReader();reader.onload=()=>change('image',String(reader.result));reader.readAsDataURL(file);};return <form className="admin-panel product-editor" onSubmit={e=>{e.preventDefault();if(!p.name||p.price<0)return;onSave({...p,available:p.stock>0});}}><div className="panel-head"><div><h2>{product?'Edit product':'Add product'}</h2><p>Catalog changes appear immediately in the storefront.</p></div><button type="button" className="icon-btn" onClick={onCancel}><X/></button></div><div className="form-grid"><Field label="Product name" value={p.name} onChange={v=>change('name',v)}/><Field label="Price (₱)" value={String(p.price)} onChange={v=>change('price',Number(v))}/><label className="field">Category<select value={p.category} onChange={e=>change('category',e.target.value)}>{['Nature','Geometric','Earth','Minimal','Custom'].map(x=><option key={x}>{x}</option>)}</select></label><Field label="Color" value={p.color} onChange={v=>change('color',v)}/><Field label="Style" value={p.style} onChange={v=>change('style',v)}/><Field label="Room" value={p.room} onChange={v=>change('room',v)}/><Field label="Stock quantity" value={String(p.stock)} onChange={v=>change('stock',Math.max(0,Number(v)))}/><label className="field full-field">Description<textarea value={p.description} onChange={e=>change('description',e.target.value)}/></label><label className="field full-field">Product image URL<input value={p.image.startsWith('data:')?'Uploaded image (local demo)':p.image} onChange={e=>change('image',e.target.value)}/><span className="field-hint">Or upload an image below. Uploaded images are stored in this browser and may use significant local storage.</span></label><label className="field full-field upload-field"><Upload size={17}/> Upload image<input type="file" accept="image/*" onChange={e=>upload(e.target.files?.[0])}/></label></div><div className="editor-actions"><button className="btn btn-primary">Save product</button><button type="button" className="btn btn-outline" onClick={onCancel}>Cancel</button></div></form>}
-/* Wider homepage collection section */
-.collection-section {
-  width: calc(100% - 100px);
-  max-width: 1500px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
-.collection-section .product-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
-}
-
-.collection-section .product-image {
-  height: 320px;
-}
-
-@media (max-width: 720px) {
-  .collection-section {
-    width: calc(100% - 36px);
-  }
-
-  .collection-section .product-image {
-    height: 185px;
-  }
-}
