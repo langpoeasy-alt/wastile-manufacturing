@@ -170,3 +170,116 @@
     padding: 35px 25px 48px;
   }
 }
+/* =================================
+   INSPIRATION SECTION
+================================= */
+
+.inspiration-section {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  align-items: center;
+  min-height: 520px;
+  padding: 55px 0 55px 7%;
+  background: #F1F0E8;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.inspiration-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 420px;
+  padding-right: 20px;
+}
+
+.inspiration-copy h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 4vw, 58px);
+  line-height: 1.12;
+  color: #26342d;
+  margin: 18px 0;
+}
+
+.inspiration-copy h2 em {
+  color: #315c49;
+}
+
+.inspiration-copy .muted {
+  font-size: 11px;
+  color: #899187;
+}
+
+/* IMAGE */
+
+.inspiration-image-container {
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  background: #F1F0E8;
+}
+
+.inspiration-image-container img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.95) 12%,
+    black 28%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.95) 12%,
+    black 28%
+  );
+
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inspiration-image-container:hover img {
+  transform: scale(1.02);
+}
+
+/* MOBILE */
+
+@media (max-width: 720px) {
+  .inspiration-section {
+    grid-template-columns: 1fr;
+    padding: 55px 6% 35px;
+    gap: 25px;
+  }
+
+  .inspiration-copy {
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .inspiration-copy h2 {
+    font-size: 38px;
+  }
+
+  .inspiration-image-container {
+    height: 320px;
+    margin: 0 -6%;
+  }
+
+  .inspiration-image-container img {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 18%
+    );
+
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 18%
+    );
+  }
+}
